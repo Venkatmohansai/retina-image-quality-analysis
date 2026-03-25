@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<<<<<<< HEAD
+<title>Extracted Features</title>
+
+<style>
+body{
+background:#020617;
+font-family:Segoe UI;
+color:white;
+padding:40px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #334155;
+}
+
+th{
+background:#111827;
+=======
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Extracted Feature Descriptions</title>
+
+<style>
+
+/* ================= RETINA COLOR PALETTE ================= */
+
+:root{
+
+--bg-main:#0b1b2b;
+--card:#12263a;
+--optic:#f59e0b;
+--teal:#14b8a6;
+--danger:#ef4444;
+--soft:#94a3b8;
+--text:#e5e7eb;
+
+}
+
+/* ================= BODY ================= */
+
+body{
+
+margin:0;
+padding:40px;
+
+font-family:"Segoe UI",sans-serif;
+
+background:radial-gradient(circle at top,#0b1b2b,#020617);
+
+color:var(--text);
+
+}
+
+/* ================= HEADER ================= */
+
+h1{
+
+text-align:center;
+
+font-size:34px;
+
+margin-bottom:35px;
+
+background:linear-gradient(90deg,var(--optic),var(--teal));
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+/* ================= BACK BUTTON ================= */
+
+.back-btn{
+
+display:inline-block;
+
+margin-bottom:25px;
+
+padding:12px 22px;
+
+border-radius:12px;
+
+text-decoration:none;
+
+background:rgba(20,184,166,.15);
+
+color:var(--teal);
+
+border:1px solid rgba(20,184,166,.4);
+
+transition:.3s ease;
+
+}
+
+.back-btn:hover{
+
+background:var(--teal);
+
+color:white;
+
+transform:translateY(-2px);
+
+box-shadow:0 10px 25px rgba(20,184,166,.4);
+
+>>>>>>> 3194ce0 (all changed)
+}
+
+/* ================= TABLE CONTAINER ================= */
+
+.table-container{
+
+background:var(--card);
+
+padding:35px;
+
+border-radius:20px;
+
+box-shadow:0 20px 45px rgba(0,0,0,.6);
+
+overflow-x:auto;
+
+}
+
+/* ================= TABLE ================= */
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+font-size:15px;
+
+}
+
+/* sticky header */
+
+th{
+
+position:sticky;
+
+top:0;
+
+background:linear-gradient(90deg,var(--optic),var(--teal));
+
+color:white;
+
+padding:16px;
+
+text-align:left;
+
+font-size:16px;
+
+}
+
+/* rows */
+
+td{
+
+padding:15px;
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+color:#cbd5e1;
+
+}
+
+/* hover effect */
+
+tr:hover td{
+
+background:rgba(20,184,166,.08);
+
+transition:.25s ease;
+
+}
+
+/* ================= FEATURE GROUP COLORS ================= */
+
+.feature-name{
+
+font-weight:600;
+
+}
+
+/* C features */
+
+.feature-name:has(span.c){
+
+color:#fbbf24;
+
+}
+
+/* D features */
+
+.feature-name:has(span.d){
+
+color:#60a5fa;
+
+}
+
+/* symmetry features */
+
+.feature-name:has(span.sym){
+
+color:#f87171;
+
+}
+
+/* filtered features */
+
+.feature-name:has(span.f){
+
+color:#34d399;
+
+}
+
+/* wavelet features */
+
+.feature-name:has(span.w){
+
+color:#c084fc;
+
+}
+
+/* angle highlight */
+
+.angle{
+
+color:var(--optic);
+
+font-weight:600;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<<<<<<< HEAD
+<h1>Extracted Feature Descriptions</h1>
+=======
+
+<a href="/" class="back-btn">
+
+← Back to Analysis
+
+</a>
+
+
+<h1>
+
+Extracted Feature Descriptions
+
+</h1>
+
+>>>>>>> 3194ce0 (all changed)
+
+<table>
+<tr>
+
+<th>Feature</th>
+
+<th>Description</th>
+
+</tr>
+
+
+{% for k,v in features.items() %}
+
+<tr>
+<<<<<<< HEAD
+<td>{{ k }}</td>
+<td>{{ v }}</td>
+=======
+
+<td class="feature-name">
+
+{% if "_" in k %}
+
+    {% set parts = k.split("_") %}
+
+    {% if parts|length > 1 and parts[1].isdigit() %}
+
+        {{ parts[0] }}
+
+        <span class="angle">{{ parts[1] }}°</span>
+
+    {% else %}
+
+        {{ k.replace("_"," ") }}
+
+    {% endif %}
+
+{% else %}
+
+    {{ k }}
+
+{% endif %}
+
+</td>
+
+
+<td>
+
+{{ v|safe }}
+
+</td>
+
+
+>>>>>>> 3194ce0 (all changed)
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+<<<<<<< HEAD
+=======
+</div>
+
+
+>>>>>>> 3194ce0 (all changed)
+</body>
+
+</html>

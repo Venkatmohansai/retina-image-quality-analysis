@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Retinal Fundus Image Quality Assessment</title>
+
+<style>
+
+/* ================= RETINA COLOR THEME ================= */
+
+:root{
+
+--bg-main:#0b1b2b;
+--card:#12263a;
+--optic:#f59e0b;
+--teal:#14b8a6;
+--danger:#ef4444;
+--soft:#9ca3af;
+--text:#e5e7eb;
+
+}
+
+/* ================= BODY ================= */
+
+body{
+
+margin:0;
+font-family:"Segoe UI",sans-serif;
+background:radial-gradient(circle at top,#0b1b2b,#020617);
+color:var(--text);
+
+}
+
+/* ================= HEADER ================= */
+
+.header{
+
+text-align:center;
+padding:40px 20px;
+
+}
+
+.title{
+
+font-size:30px;
+font-weight:600;
+
+background:linear-gradient(90deg,var(--optic),var(--teal));
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+.subtitle{
+
+margin-top:8px;
+font-size:14px;
+color:var(--soft);
+
+}
+
+/* ================= LAYOUT ================= */
+
+.container{
+
+max-width:1200px;
+margin:auto;
+padding:30px;
+
+}
+
+.grid{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:50px;
+
+}
+
+@media(max-width:900px){
+
+.grid{
+grid-template-columns:1fr;
+}
+
+}
+
+/* ================= CARD ================= */
+
+.card{
+
+background:var(--card);
+padding:40px;
+border-radius:20px;
+
+box-shadow:0 10px 40px rgba(0,0,0,.5);
+
+}
+
+/* ================= UPLOAD SECTION ================= */
+
+.upload-title{
+
+font-size:22px;
+margin-bottom:20px;
+
+}
+
+/* upload wrapper */
+
+.upload-wrapper{
+
+display:flex;
+justify-content:center;
+
+}
+
+/* upload box */
+
+.upload-box{
+
+width:100%;
+max-width:420px;
+
+border:2px dashed var(--teal);
+
+padding:50px 20px;
+
+border-radius:18px;
+
+text-align:center;
+
+cursor:pointer;
+
+transition:.3s ease;
+
+background:rgba(20,184,166,.05);
+
+}
+
+.upload-box:hover{
+
+background:rgba(20,184,166,.12);
+border-color:var(--optic);
+
+transform:translateY(-2px);
+
+}
+
+.upload-box input{
+
+display:none;
+
+}
+
+/* upload icon */
+
+.upload-icon{
+
+font-size:38px;
+margin-bottom:10px;
+
+}
+
+/* upload text */
+
+.upload-text{
+
+font-size:18px;
+font-weight:500;
+
+}
+
+/* upload subtext */
+
+.upload-subtext{
+
+margin-top:5px;
+font-size:13px;
+color:var(--soft);
+
+}
+
+/* ================= BUTTON ================= */
+
+.analyze-btn{
+
+margin-top:35px;
+
+width:100%;
+max-width:420px;
+
+display:block;
+
+margin-left:auto;
+margin-right:auto;
+
+padding:16px;
+
+border:none;
+border-radius:12px;
+
+background:linear-gradient(90deg,var(--optic),var(--teal));
+
+color:white;
+
+font-size:17px;
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.analyze-btn:hover{
+
+transform:translateY(-2px);
+
+}
+
+/* ================= IMAGE PREVIEW ================= */
+
+.preview{
+
+margin-top:25px;
+text-align:center;
+
+}
+
+.preview img{
+
+width:260px;
+
+border-radius:16px;
+
+box-shadow:0 0 25px rgba(0,0,0,.7);
+
+}
+
+/* ================= PIPELINE ================= */
+
+.pipeline-title{
+
+font-size:22px;
+margin-bottom:25px;
+
+}
+
+.step{
+
+padding:16px;
+
+margin-bottom:14px;
+
+border-radius:12px;
+
+background:#1f3a52;
+
+opacity:.5;
+
+transition:.4s;
+
+}
+
+.step.active{
+
+background:linear-gradient(90deg,var(--optic),var(--teal));
+
+opacity:1;
+
+}
+
+/* ================= FEATURE BUTTON ================= */
+
+.feature-btn{
+
+display:inline-block;
+
+margin-top:12px;
+
+padding:8px 18px;
+
+background:var(--teal);
+
+border-radius:10px;
+
+font-size:13px;
+
+text-decoration:none;
+
+color:white;
+
+}
+
+/* ================= RESULT ================= */
+
+.result{
+
+margin-top:30px;
+
+text-align:center;
+
+font-size:28px;
+
+font-weight:600;
+
+}
+
+.success{
+
+color:var(--teal);
+
+}
+
+.danger{
+
+color:var(--danger);
+
+}
+
+/* ================= CONFIDENCE CIRCLE ================= */
+
+.meter{
+
+width:190px;
+height:190px;
+
+margin:30px auto;
+
+border-radius:50%;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+font-size:30px;
+
+background:#020617;
+
+box-shadow:
+
+0 0 25px rgba(245,158,11,.3),
+inset 0 0 40px rgba(0,0,0,.9);
+
+}
+
+.meter span{
+
+font-size:14px;
+color:var(--soft);
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+<div class="title">
+
+Retinal Fundus Image Quality Assessment Tool
+
+</div>
+
+<div class="subtitle">
+
+Support Vector Machine (SVM) Based Classification System
+
+</div>
+
+</div>
+
+
+<div class="container">
+
+<form method="POST" enctype="multipart/form-data">
+
+<div class="grid">
+
+
+<!-- LEFT PANEL -->
+
+<div class="card">
+
+<div class="upload-title">
+
+Upload Retinal Fundus Image
+
+</div>
+
+
+<div class="upload-wrapper">
+
+<label class="upload-box">
+
+<input type="file" name="image" accept="image/*">
+
+<div class="upload-icon">🩺</div>
+
+<div class="upload-text">
+
+Click to Upload Retinal Image
+
+</div>
+
+<div class="upload-subtext">
+
+Supported formats: JPG, PNG
+
+</div>
+
+</label>
+
+</div>
+
+
+<button class="analyze-btn">
+
+Run Quality Analysis
+
+</button>
+
+
+<div class="preview">
+
+{% if image_url %}
+
+<img src="{{ image_url }}">
+
+<div style="margin-top:8px;font-size:13px;color:var(--soft)">
+
+Image resized to 256 × 256 before feature extraction
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+
+<!-- RIGHT PANEL -->
+
+<div class="card">
+
+<div class="pipeline-title">
+
+Processing Pipeline
+
+</div>
+
+
+<div id="step1" class="step">Image Upload</div>
+
+<div id="step2" class="step">Resize to 256 × 256</div>
+
+
+<div id="step3" class="step">
+
+Extracted Features
+
+{% if result %}
+
+<br>
+
+<a href="/features" class="feature-btn">
+
+View Feature Descriptions →
+
+</a>
+
+{% endif %}
+
+</div>
+
+
+<div id="step4" class="step">
+
+SVM Classification
+
+</div>
+
+
+<div id="step5" class="step">
+
+Final Quality Decision
+
+</div>
+
+
+<div class="result
+{% if result and 'GOOD' in result %}success
+{% elif result %}danger
+{% endif %}
+">
+
+{{ result }}
+
+</div>
+
+
+{% if result %}
+
+<div class="meter">
+
+{{ confidence }}%
+
+<span>Model Confidence</span>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+
+<script>
+
+{% if result %}
+
+const steps=["step1","step2","step3","step4","step5"];
+
+steps.forEach((step,index)=>{
+
+setTimeout(()=>{
+
+document.getElementById(step).classList.add("active");
+
+},index*400);
+
+});
+
+{% endif %}
+
+</script>
+
+
+</body>
+
+</html>

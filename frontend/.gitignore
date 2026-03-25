@@ -1,0 +1,22 @@
+# Virtual environments
+venv/
+.venv/
+backend/venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Upload/generated images
+backend/uploads/
+backend/static/*.png
+
+# Model files
+backend/artifacts/*.pkl
+
+# Dataset (optional)
+dataset/
+
+# OS files
+.DS_Store
+Thumbs.db
