@@ -1,22 +1,72 @@
-# Virtual environments
+# ==============================
+# Virtual Environments
+# ==============================
 venv/
 .venv/
 backend/venv/
 
-# Python cache
+# ==============================
+# Python Cache Files
+# ==============================
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Upload/generated images
+# ==============================
+# Upload / Generated Files
+# ==============================
 backend/uploads/
 backend/static/*.png
+backend/static/*.jpg
+backend/static/*.jpeg
 
-# Model files
+# ==============================
+# Model Files (ignore all except deployed model)
+# ==============================
 backend/artifacts/*.pkl
+!backend/artifacts/svm_selectkbest_best.pkl
 
-# Dataset (optional)
+# ==============================
+# Dataset Files
+# ==============================
 dataset/
+datasets/
+*.zip
+*.tar
+*.gz
 
-# OS files
+# ==============================
+# Jupyter Notebook Checkpoints
+# ==============================
+.ipynb_checkpoints/
+
+# ==============================
+# Environment Variables
+# ==============================
+.env
+
+# ==============================
+# Logs
+# ==============================
+*.log
+
+
+backend/artifacts/test_results.txt
+
+# ==============================
+# OS Files
+# ==============================
 .DS_Store
 Thumbs.db
+
+# ==============================
+# VS Code Settings (optional)
+# ==============================
+.vscode/
+
+# ==============================
+# Render / Deployment Cache
+# ==============================
+__pycache__/
+*.sqlite3
