@@ -1,8 +1,22 @@
+# Virtual environments
 venv/
-dataset/
-artifacts/
-*.pkl
-*.npy
-*.zip
+.venv/
+backend/venv/
+
+# Python cache
 __pycache__/
-.env
+*.pyc
+
+# Upload/generated images
+backend/uploads/
+backend/static/*.png
+
+# Model files
+backend/artifacts/*.pkl
+
+# Dataset (optional)
+dataset/
+
+# OS files
+.DS_Store
+Thumbs.db
