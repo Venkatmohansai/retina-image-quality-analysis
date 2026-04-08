@@ -22,7 +22,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 
-MODEL_PATH = os.path.join(BASE_DIR, "artifacts", "svm_selectkbest_best.pkl")
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "artifacts",
+    "random_forest_selectkbest_best.pkl"
+)
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -33,111 +37,100 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 model = joblib.load(MODEL_PATH)
 
-print("✅ SVM model loaded successfully")
+print("✅ Random Forest model loaded successfully")
 
 
 # ======================================================
-# FEATURE DESCRIPTIONS (WITH DEGREE ORIENTATION)
+# FEATURE DESCRIPTIONS
 # ======================================================
 
 FEATURE_DESCRIPTIONS = {
 
-# ---------- C FEATURES (Original Image) ----------
-
 "C_Mean": "Average brightness of the retinal image.",
 "C_Std": "Intensity variation indicating vessel contrast strength.",
-"C_Skew": "Asymmetry of grayscale distribution revealing illumination imbalance.",
-"C_Kurt": "Sharpness of intensity peaks indicating vessel edge clarity.",
-"C_Ent": "Entropy measuring structural complexity of retinal texture.",
-"C_Q1": "Lower quartile intensity detecting darker regions.",
-"C_Med": "Median brightness representing stable illumination level.",
-"C_Q3": "Upper quartile intensity representing highlight regions.",
+"C_Skew": "Asymmetry of grayscale distribution.",
+"C_Kurt": "Sharpness of intensity peaks.",
+"C_Ent": "Entropy measuring texture complexity.",
+"C_Q1": "Lower quartile intensity.",
+"C_Med": "Median brightness level.",
+"C_Q3": "Upper quartile intensity.",
 
-"C_Contrast_0°": "Texture contrast along horizontal direction (0°).",
-"C_Corr_0°": "Pixel correlation along horizontal direction (0°).",
-"C_En_0°": "Texture uniformity along horizontal direction (0°).",
-"C_Hom_0°": "Intensity smoothness along horizontal direction (0°).",
+"C_Contrast_0°": "Horizontal texture contrast (0°).",
+"C_Corr_0°": "Horizontal pixel correlation (0°).",
+"C_En_0°": "Horizontal texture energy (0°).",
+"C_Hom_0°": "Horizontal homogeneity (0°).",
 
-"C_Corr_45°": "Pixel correlation along diagonal direction (45°).",
-"C_En_45°": "Texture uniformity along diagonal direction (45°).",
+"C_Corr_45°": "Diagonal correlation (45°).",
+"C_En_45°": "Diagonal energy (45°).",
 
-"C_Contrast_90°": "Texture contrast along vertical direction (90°).",
-"C_Corr_90°": "Pixel correlation along vertical direction (90°).",
-"C_En_90°": "Texture uniformity along vertical direction (90°).",
-"C_Hom_90°": "Intensity smoothness along vertical direction (90°).",
+"C_Contrast_90°": "Vertical contrast (90°).",
+"C_Corr_90°": "Vertical correlation (90°).",
+"C_En_90°": "Vertical energy (90°).",
+"C_Hom_90°": "Vertical homogeneity (90°).",
 
-"C_Corr_135°": "Pixel correlation along diagonal direction (135°).",
-"C_En_135°": "Texture uniformity along diagonal direction (135°).",
+"C_Corr_135°": "Diagonal correlation (135°).",
+"C_En_135°": "Diagonal energy (135°).",
 
 
-# ---------- D FEATURES (Downsampled Image) ----------
-
-"D_Mean": "Mean intensity after resolution reduction.",
+"D_Mean": "Mean intensity after downsampling.",
 "D_Std": "Contrast variation after downsampling.",
-"D_Ent": "Texture randomness after resolution reduction.",
-"D_Q1": "Lower quartile intensity after downsampling.",
-"D_Med": "Median intensity after downsampling.",
-"D_Q3": "Upper quartile intensity after downsampling.",
+"D_Ent": "Entropy after resolution reduction.",
+"D_Q1": "Lower quartile after downsampling.",
+"D_Med": "Median after downsampling.",
+"D_Q3": "Upper quartile after downsampling.",
 
-"D_Corr_0°": "Horizontal correlation at reduced resolution (0°).",
-"D_En_0°": "Horizontal texture energy at reduced resolution (0°).",
+"D_Corr_0°": "Horizontal correlation (0°).",
+"D_En_0°": "Horizontal energy (0°).",
 
-"D_Corr_45°": "Diagonal correlation at reduced resolution (45°).",
-"D_En_45°": "Diagonal texture energy at reduced resolution (45°).",
+"D_Corr_45°": "Diagonal correlation (45°).",
+"D_En_45°": "Diagonal energy (45°).",
 
-"D_Corr_90°": "Vertical correlation at reduced resolution (90°).",
-"D_En_90°": "Vertical texture energy at reduced resolution (90°).",
+"D_Corr_90°": "Vertical correlation (90°).",
+"D_En_90°": "Vertical energy (90°).",
 
-"D_Corr_135°": "Diagonal correlation at reduced resolution (135°).",
-"D_En_135°": "Diagonal texture energy at reduced resolution (135°).",
-
-
-# ---------- SYMMETRY FEATURES ----------
-
-"Sym1": "Difference between left and right halves of retina.",
-"Sym2": "Difference between upper and lower halves of retina.",
-"Sym3": "Difference across main diagonal symmetry.",
-"Sym4": "Difference across secondary diagonal symmetry.",
+"D_Corr_135°": "Diagonal correlation (135°).",
+"D_En_135°": "Diagonal energy (135°).",
 
 
-# ---------- FILTERED FEATURES ----------
-
-"F_Skew": "Intensity asymmetry after Gaussian smoothing.",
-"F_Kurt": "Sharpness of filtered intensity distribution.",
-
-"F_Corr_0°": "Filtered horizontal correlation (0°).",
-"F_En_0°": "Filtered horizontal texture energy (0°).",
-
-"F_Corr_45°": "Filtered diagonal correlation (45°).",
-"F_En_45°": "Filtered diagonal texture energy (45°).",
-
-"F_Corr_90°": "Filtered vertical correlation (90°).",
-"F_En_90°": "Filtered vertical texture energy (90°).",
-
-"F_Corr_135°": "Filtered diagonal correlation (135°).",
-"F_En_135°": "Filtered diagonal texture energy (135°).",
+"Sym1": "Left–right symmetry difference.",
+"Sym2": "Top–bottom symmetry difference.",
+"Sym3": "Main diagonal symmetry difference.",
+"Sym4": "Secondary diagonal symmetry difference.",
 
 
-# ---------- WAVELET FEATURES ----------
+"F_Skew": "Filtered skewness after smoothing.",
+"F_Kurt": "Filtered kurtosis after smoothing.",
 
-"W_RLHStd": "Standard deviation of LH wavelet band (horizontal edges).",
-"W_RLHKurt": "Kurtosis of LH wavelet band.",
-"W_GLHStd": "Standard deviation of HL wavelet band (vertical edges).",
-"W_GLHSkew": "Skewness of HL wavelet band.",
-"W_GLHKurt": "Kurtosis of HL wavelet band.",
-"W_GHLSkew": "Skewness of HH wavelet band (diagonal edges).",
-"W_GHLKurt": "Kurtosis of HH wavelet band.",
-"W_BLHSkew": "Skewness of low-frequency LH components.",
-"W_BLHKurt": "Kurtosis of low-frequency LH components.",
-"W_BHLMean": "Mean value of HL wavelet band.",
-"W_BHLSkew": "Skewness of HL wavelet components.",
-"W_BHHSkew": "Skewness of HH wavelet components."
+"F_Corr_0°": "Filtered correlation (0°).",
+"F_En_0°": "Filtered energy (0°).",
 
+"F_Corr_45°": "Filtered correlation (45°).",
+"F_En_45°": "Filtered energy (45°).",
+
+"F_Corr_90°": "Filtered correlation (90°).",
+"F_En_90°": "Filtered energy (90°).",
+
+"F_Corr_135°": "Filtered correlation (135°).",
+"F_En_135°": "Filtered energy (135°).",
+
+
+"W_RLHStd": "Std of LH wavelet band.",
+"W_RLHKurt": "Kurtosis of LH band.",
+"W_GLHStd": "Std of HL band.",
+"W_GLHSkew": "Skewness of HL band.",
+"W_GLHKurt": "Kurtosis of HL band.",
+"W_GHLSkew": "Skewness of HH band.",
+"W_GHLKurt": "Kurtosis of HH band.",
+"W_BLHSkew": "Skewness low-frequency LH band.",
+"W_BLHKurt": "Kurtosis low-frequency LH band.",
+"W_BHLMean": "Mean of HL band.",
+"W_BHLSkew": "Skewness HL band.",
+"W_BHHSkew": "Skewness HH band"
 }
 
 
 # ======================================================
-# MAIN PAGE ROUTE
+# MAIN ROUTE
 # ======================================================
 
 @app.route("/", methods=["GET", "POST"])
@@ -156,7 +149,10 @@ def index():
 
             filename = secure_filename(file.filename)
 
-            image_path = os.path.join(UPLOAD_FOLDER, filename)
+            image_path = os.path.join(
+                UPLOAD_FOLDER,
+                filename
+            )
 
             file.save(image_path)
 
@@ -164,7 +160,10 @@ def index():
 
             if img is None:
                 error = "Invalid image file"
-                return render_template("index.html", error=error)
+                return render_template(
+                    "index.html",
+                    error=error
+                )
 
             features = extract_features(image_path)
 
@@ -174,7 +173,10 @@ def index():
 
             class_index = list(model.classes_).index(prediction)
 
-            confidence = round(probabilities[class_index] * 100, 2)
+            confidence = round(
+                probabilities[class_index] * 100,
+                2
+            )
 
             result = (
                 "GOOD QUALITY IMAGE"
@@ -190,12 +192,12 @@ def index():
         confidence=confidence,
         image_url=image_url,
         error=error,
-        model_name="Support Vector Machine (SVM)"
+        model_name="Random Forest"
     )
 
 
 # ======================================================
-# FEATURES PAGE ROUTE
+# FEATURE PAGE
 # ======================================================
 
 @app.route("/features")
@@ -208,13 +210,16 @@ def features():
 
 
 # ======================================================
-# SERVE UPLOADED IMAGE
+# SERVE UPLOADS
 # ======================================================
 
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
 
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    return send_from_directory(
+        UPLOAD_FOLDER,
+        filename
+    )
 
 
 # ======================================================
