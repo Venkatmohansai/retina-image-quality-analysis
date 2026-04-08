@@ -4,9 +4,7 @@ import joblib
 
 from feature_extraction import extract_features
 
-from sklearn.svm import SVC
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 
@@ -81,32 +79,29 @@ print("Validation samples:", len(X_val))
 
 
 # --------------------------------------------------
-# IMPROVED SVM PIPELINE
+# RANDOM FOREST CLASSIFIER
 # --------------------------------------------------
 
-pipeline = Pipeline([
+model = RandomForestClassifier(
 
-    ("scaler", StandardScaler()),
+    n_estimators=300,        # number of trees
+    max_depth=25,            # prevents overfitting
+    min_samples_split=5,
+    min_samples_leaf=2,
+    class_weight="balanced", # handles BAD/GOOD imbalance
+    random_state=42,
+    n_jobs=-1                # uses all CPU cores
 
-    ("clf", SVC(
-        kernel="rbf",          # best for retinal texture features
-        C=25,                  # stronger separation
-        gamma="scale",         # automatic tuning
-        probability=True,      # enables confidence scores
-        class_weight="balanced",  # fixes BAD/GOOD imbalance
-        random_state=42
-    ))
-
-])
+)
 
 
 # --------------------------------------------------
 # TRAIN MODEL
 # --------------------------------------------------
 
-print("\n🧠 Training improved SVM classifier...")
+print("\n🧠 Training Random Forest classifier...")
 
-pipeline.fit(X_train, y_train)
+model.fit(X_train, y_train)
 
 
 # --------------------------------------------------
@@ -115,7 +110,7 @@ pipeline.fit(X_train, y_train)
 
 print("\n📊 VALIDATION RESULTS")
 
-y_pred = pipeline.predict(X_val)
+y_pred = model.predict(X_val)
 
 accuracy = accuracy_score(y_val, y_pred)
 
@@ -140,10 +135,10 @@ print(confusion_matrix(y_val, y_pred))
 
 model_path = os.path.join(
     ARTIFACTS_DIR,
-    "svm_selectkbest_best.pkl"
+    "random_forest_selectkbest_best.pkl"
 )
 
-joblib.dump(pipeline, model_path)
+joblib.dump(model, model_path)
 
 print("\n✅ Model saved successfully at:")
 print(model_path)
